@@ -7,6 +7,16 @@ class Summary {
     this.config = getConfig();
   }
 
+  getContactInfo(contact) {
+    let returnValue = "";
+    if (contact) {
+      returnValue = (contact.name ? contact.name + " / " : "") + 
+        (contact.email ? contact.email + " / " : "") + 
+        (contact.phone ? contact.phone : "");
+    }
+    return returnValue;
+  }
+
   typeSummary(typeCounts, filePrefix) {
     let summary = "";
     Object.keys(typeCounts).forEach((key, i) => {
@@ -14,12 +24,28 @@ class Summary {
       summary += `<strong>${key}:</strong> ${repos.length}<br />`;
       fsCalls.writeToFile(
         `./summary/${filePrefix}_${key}.html`,
-        `<table border="1" cellspacing="0" cellpadding="1"><tr><th style="text-align: left;">Agency</th><th style="text-align: left;">Project Name</th><th style="text-align: left;">Repository URL</th></tr>`
+        `<table border="1" cellspacing="0" cellpadding="1">
+          <tr>
+            <th style="text-align: left;">Agency</th>
+            <th style="text-align: left;">Organziation</th>
+            <th style="text-align: left;">Project Name</th>
+            <th style="text-align: left;">Contact</th>
+            <th style="text-align: left;">Repository URL</th>
+            <th style="text-align: left;">CODE.GOV URL</th>
+          </tr>`
       );
       repos.forEach(repo => {
         fsCalls.writeToFile(
             `./summary/${filePrefix}_${key}.html`,
-            `<tr><td>${repo.agency.acronym}</td><td>${repo.name}</td><td>${repo.repositoryURL}</td></tr>`,
+            `<tr>
+              <td>${repo.agency.acronym}</td>
+              <td>${repo.organization ? repo.organization : ""}</td>
+              <td>${repo.name}</td>
+              <td>${this.getContactInfo(repo.contact)}</td>
+              <td><a href="${repo.repositoryURL}">${repo.repositoryURL}</a></td>
+              <td><a href="https://code.gov/projects/${repo.repoID}">https://code.gov/projects/${repo.repoID}</a></td>
+              <td>
+            </tr>`,
             true
           );
         });

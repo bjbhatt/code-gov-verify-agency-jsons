@@ -77,7 +77,7 @@ class Summary {
           wasRemoteJsonRetrived: data.statuses[key].wasRemoteJsonRetrived,
           wasRemoteJsonParsed: data.statuses[key].wasRemoteJsonParsed,
           wasFallbackUsed: data.statuses[key].wasFallbackUsed,
-          counts: data.statuses[key].counts
+          counts: data.statuses[key].counts ? data.statuses[key].counts : { processed: 0}
         });
       });
     }
